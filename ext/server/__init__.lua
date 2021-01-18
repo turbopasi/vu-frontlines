@@ -1,49 +1,30 @@
+local Util = class('Util')
+local Point = require('Point')
 
-local pointP = {
-  x = -115,
-  y = -182
-}
-
-local pointQ = {
-  x = -63,
-  y = -11
-}
-
-local rectWidth = 50
-
-function printCorners(p, q, length)
+-- given 2 midpoints and the width of a rectangle,
+-- calculate coordinates of the corners
+function Util:GetCoordinatesOfRectangle(p, q, width)
 
   -- calc slop of side
   local slope = (p.x - q.x) / (q.y - p.y)
 
   -- calc displacement along axes
-  local dx = length / ( math.sqrt( 1 + ( slope * slope ) ) * 0.5 )
+  local dx = width / ( math.sqrt( 1 + ( slope * slope ) ) * 0.5 )
   local dy = slope * dx
 
-  print("A")
-  print(p.x - dx)
-  print(p.y - dy)
+  local coordinates = {
+    a = Point(p.x - dx, p.y - dy),
+    b = Point(p.x + dx, p.y + dy),
+    c = Point(q.x - dx, q.y - dy),
+    d = Point(q.x + dx, q.y + dy)
+  }
 
-  print("B")
-  print(p.x + dx)
-  print(p.y + dy)
-
-  print("C")
-  print(q.x - dx)
-  print(q.y - dy)
-
-  print("D")
-  print(q.x + dx)
-  print(q.y + dy)
+  return coordinates
 
 end
 
-function printDistance(p, q)
+function Util:GetDistanceBetweenPoints(p, q)
   local a = p.x - q.x
   local b = p.y - q.y
-  print("Distance")
-  print(math.sqrt( a * a + b * b ))
+  return math.sqrt( a * a + b * b )
 end
-
-printCorners(pointP, pointQ, rectWidth)
-printDistance(pointP, pointQ)

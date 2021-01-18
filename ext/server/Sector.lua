@@ -1,7 +1,11 @@
 local Sector = class("Sector")
 
-function Sector:__init(name, coords)
+function Sector:__init(name, coords, width, height)
 
+  self.name   = name
+  self.width  = width
+  self.height = height
+  self.area   = width * height
   self.coords = {
     a = coords.a,
     b = coords.b,
@@ -10,8 +14,6 @@ function Sector:__init(name, coords)
   }
 
   self.state = 0
-  self.name = name
-
   self._onChangeState = nil
 
 end
@@ -35,10 +37,14 @@ end
 function Sector:IsPlayerInside(player)
 end
 
+function Sector:Reset()
+  self.state = 0
+end
+
 
 -- local sectorA = Sector("A", {
 --   a = Point(0,0),
 --   b = Point(0,0),
 --   c = Point(0,0),
 --   d = Point(0,0)
--- })
+-- }, 100, 200)
