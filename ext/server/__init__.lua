@@ -1,30 +1,32 @@
-local Util = class('Util')
-local Point = require('Point')
+-- so we have 2 midpoints (starting area)
+-- based on this we can calculate : 
+  -- distance 
+  -- slope 
 
--- given 2 midpoints and the width of a rectangle,
--- calculate coordinates of the corners
-function Util:GetCoordinatesOfRectangle(p, q, width)
+  local UtilClass = require('__shared/Util')
+  local Area = require('__shared/Area')
 
-  -- calc slop of side
-  local slope = (p.x - q.x) / (q.y - p.y)
+  local pointStart = {x = 1, y = 2}
+  local pointEnd   = {x = 3, y = 9}
+  local width      = 6
 
-  -- calc displacement along axes
-  local dx = width / ( math.sqrt( 1 + ( slope * slope ) ) * 0.5 )
-  local dy = slope * dx
+  local distance = Util:GetDistanceBetweenPoints(pointStart, pointEnd)
+  local distanceStep = distance / 6
 
-  local coordinates = {
-    a = Point(p.x - dx, p.y - dy),
-    b = Point(p.x + dx, p.y + dy),
-    c = Point(q.x - dx, q.y - dy),
-    d = Point(q.x + dx, q.y + dy)
-  }
+  -- find points along the line
+  local pointOnLine1 = Util:GetPointOnLine(pointStart, pointEnd, distanceStep)
+  local pointOnLine2 = Util:GetPointOnLine(pointOnLine1, pointEnd, distanceStep)
+  local pointOnLine3 = Util:GetPointOnLine(pointOnLine2, pointEnd, distanceStep)
+  local pointOnLine4 = Util:GetPointOnLine(pointOnLine3, pointEnd, distanceStep)
+  local pointOnLine5 = Util:GetPointOnLine(pointOnLine4, pointEnd, distanceStep)
 
-  return coordinates
+  -- corner points of first area
+  local coords1 = Util:GetCoordinatesOfRectangle(pointStart, pointOnLine1, width)
 
-end
+  print(coords1)
 
-function Util:GetDistanceBetweenPoints(p, q)
-  local a = p.x - q.x
-  local b = p.y - q.y
-  return math.sqrt( a * a + b * b )
-end
+  local area1 = Area(coords1.a, coords1.b, coords1.c, coords1.d)
+
+  print(area1.width)
+  print(area1.height)
+  print(area1.area)

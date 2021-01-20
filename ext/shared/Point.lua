@@ -1,4 +1,4 @@
-local Point = class("Point")
+local Point = class('Point')
 
 function Point:__init(x, y)
 
